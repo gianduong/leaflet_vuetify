@@ -1,0 +1,14 @@
+$color-write: #fff;
+@import "./icon.scss";
+@mixin WidthHeight($w, $h) {
+    width: $w;
+    height: $h;
+}
+@mixin Display {
+    display: flex;
+    align-items: center;
+}
+.background{
+    background: radial-gradient(black, transparent);
+}
+/*----navbar------*/

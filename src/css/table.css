@@ -1,0 +1,232 @@
+tr {
+  height: 47px;
+}
+.table-checkbox {
+  min-width: 40px;
+  width: 40px;
+}
+tbody tr td {
+  padding: 5px 10px;
+  border-bottom: 1px solid #c7c7c7;
+  color: #000;
+}
+tr td:not(.no--right-border) {
+  border-right: 1px dotted #c7c7c7;
+}
+tr:hover td {
+  background: #f3f8f8;
+}
+.sticky {
+  position: sticky;
+  width: 120px;
+  height: 34px;
+  border-right: none;
+  right: 0;
+  text-align: center;
+  background: #fff;
+  z-index: 100;
+}
+
+/* choose btn */
+.fix-container {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+.fix-container span {
+  font-family: notosans-semibold;
+  color: #0075cb;
+  padding: 6px 0 6px 16px;
+}
+.choose-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 10px;
+  z-index: 1000;
+}
+
+.list-select {
+  position: absolute;
+  height: auto;
+  width: auto;
+  z-index: 9990;
+  transform: translate(-101%);
+  background-color: #fff;
+  top: 16px;
+  right: 0;
+  padding: 2px 0;
+  border: 1px solid #babec5;
+  border-radius: 2px;
+  text-align: left;
+}
+.list-select-item {
+  background: #fff;
+  padding: 5px 10px;
+  height: 32px;
+  cursor: pointer;
+}
+.list-select-item:hover {
+  background: #ebedf0;
+  color: #2ca01c;
+}
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.table thead tr {
+  height: 34px;
+}
+.table thead th {
+  text-align: left;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: "notosans-bold";
+  background: #eceef1;
+  top: 0;
+  position: sticky;
+  white-space: nowrap;
+  color: #000;
+  border-bottom: 1px solid #c7c7c7;
+  box-shadow: 0 1px 1px -1px #bbb;
+  z-index: 101;
+  border-left: 1px solid #c7c7c7;
+}
+
+.table-head-checkbox {
+  border-left: none !important;
+}
+.m-6{
+  min-width: 6%;
+}
+.m-20{
+  min-width: 20%;
+}
+.m-27{
+  min-width: 27%;
+}
+.m-80{
+  min-width: 80px;
+}
+.m-100{
+  min-width: 100px;
+}
+.m-250 {
+  min-width: 250px;
+}
+.m-150 {
+  min-width: 150px;
+}
+.m-180 {
+  min-width: 180px;
+}
+.m-200{
+  min-width: 200px;
+}
+.m-120 {
+  min-width: 120px;
+}
+.m-300 {
+  min-width: 300px;
+}
+.m-400 {
+  min-width: 400px;
+}
+.th-sticky {
+  right: 0;
+  text-align: center !important;
+  z-index: 101;
+  border-left: none !important;
+}
+
+.th-sticky th {
+  height: 34px;
+  width: 120px;
+}
+
+/* Drop down in table */
+.dropdown-icon {
+  width: 16px;
+  height: 16px;
+  background: url("../assets/img/Sprites.64af8f61.svg") no-repeat -896px -359px;
+}
+/* border sticky */
+.border-left {
+  width: 120px;
+  height: 34px;
+  left: 0;
+  top: 0;
+  border-left: 1px solid #c7c7c7;
+  position: absolute;
+}
+.border-left--dotted {
+  border-left: 1px dotted #c7c7c7;
+  top: 0;
+  height: 47px;
+}
+/* table select */
+
+.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded)
+  > .v-input__control
+  > .v-input__slot,
+.v-text-field.v-text-field--enclosed .v-text-field__details {
+  padding: 0 !important;
+}
+
+/* dropdown in table */
+.choose-btn {
+  padding: none !important;
+}
+.choose-btn .v-select__selections {
+  display: none !important;
+}
+.choose-btn .v-text-field.v-text-field--solo .v-label {
+  display: none !important;
+}
+.choose-btn .v-input__append-inner {
+  padding-left: 0px !important;
+  margin-left: 0px !important;
+}
+.choose-btn .v-select__slot {
+  width: 24px !important;
+}
+.choose-btn .v-input__icon {
+  width: 26px !important;
+  height: 16px !important;
+  position: relative;
+  bottom: 8px;
+}
+.v-input__icon:hover {
+  background-color: none !important;
+}
+.choose-btn
+  .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)
+  > .v-input__control
+  > .v-input__slot {
+  border: none !important;
+}
+.choose-btn .v-input {
+  height: 16px !important;
+}
+.choose-btn
+  .theme--light.v-text-field--solo
+  > .v-input__control
+  > .v-input__slot {
+  background-color: transparent !important;
+}
+.choose-btn .v-text-field__details {
+  display: none;
+}
+.choose-btn .v-input--is-focused .v-input__icon {
+  border: 1px solid #0075cb;
+}
+
+.choose-btn .theme--light.v-icon {
+  color: #0075cb;
+  position: relative;
+  right: 0.5px;
+}
+.choose-btn .v-icon.v-icon {
+  font-size: 22px !important;
+}
