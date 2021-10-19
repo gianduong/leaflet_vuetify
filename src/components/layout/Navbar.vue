@@ -16,7 +16,7 @@
     </v-list-item>
     <v-divider class="divider" dark></v-divider>
     <v-list>
-      <v-list-item v-for="([icon, text], i) in items" :key="i" link>
+      <v-list-item v-for="([icon, text], i) in items" :key="i" link to="/Breweries">
         <v-list-item-icon>
           <v-icon>{{ icon }}</v-icon>
         </v-list-item-icon>

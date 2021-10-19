@@ -1,0 +1,12 @@
+<template>
+  <div>   
+    <v-img
+      class="mt-16"
+      lazy-src="../../assets/img/404.png"
+      src="../../assets/img/404.png"
+      max-height="250"
+      width="100%"
+      contain
+    ></v-img>
+  </div>
+</template>
