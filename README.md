@@ -1,5 +1,5 @@
 # leaflet_vuetify
-
+Phần mềm quản lý nông nghiệp trên Webgis
 ## Project setup
 ```
 npm install
