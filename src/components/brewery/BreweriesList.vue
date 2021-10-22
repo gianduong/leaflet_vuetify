@@ -45,9 +45,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::-webkit-scrollbar {
-  width: 20px;
-}
 .brew-list {
   overflow-y: scroll;
   height: 80vh;

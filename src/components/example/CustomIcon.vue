@@ -1,7 +1,6 @@
 <template>
-
   <div>
-    <div style="height: 20%; overflow: auto;">
+    <div style="height: 20%; overflow: auto">
       <h3>Custom Marker Icons</h3>
       <label for="iconSize">Icon size:</label>
       <input
@@ -11,48 +10,32 @@
         min="1"
         max="200"
         value="64"
-      >
-      <label for="customTextInput">Custom text: </label>
-      <input
-        id="customTextInput"
-        v-model="customText"
-        type="text"
-      >
-    </div>
-    <l-map
-      :zoom="zoom"
-      :center="center"
-      style="height: 500px; width: 100%"
-    >
-      <l-tile-layer
-        :url="url"
-        :attribution="attribution"
       />
+      <label for="customTextInput">Custom text: </label>
+      <v-text-field id="customTextInput" v-model="customText" solo style="width:200px"> </v-text-field>
+    </div>
+    <l-map :zoom="zoom" :center="center" style="height: 500px; width: 100%">
+      <l-tile-layer :url="url" :attribution="attribution" />
       <!-- Use default icon -->
       <l-marker :lat-lng="[47.41322, -1.219482]" />
       <!-- Use icon given in icon property -->
-      <l-marker
-        :lat-lng="[47.41322, -1.209482]"
-        :icon="icon"
-      />
+      <l-marker :lat-lng="[47.41322, -1.209482]" :icon="icon" />
       <!-- Create image icon (icon) from l-icon tag -->
       <l-marker :lat-lng="[47.41322, -1.199482]">
         <l-icon
           :icon-size="dynamicSize"
           :icon-anchor="dynamicAnchor"
-          icon-url="/images/baseball-marker.png"
-        />
+        >
+          <v-icon>mdi-baseball</v-icon>
+        </l-icon>
       </l-marker>
       <!-- Create HTML icon (divIcon) by providing content inside the l-icon tag -->
       <l-marker :lat-lng="[47.41322, -1.189482]">
-        <l-icon
-          :icon-anchor="staticAnchor"
-          class-name="someExtraClass"
-        >
+        <l-icon :icon-anchor="staticAnchor" class-name="someExtraClass">
           <div class="headline">
             {{ customText }}
           </div>
-          <img src="/images/layers.png">
+          <v-icon>mdi-golf</v-icon>
         </l-icon>
       </l-marker>
     </l-map>
@@ -69,24 +52,24 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LIcon
+    LIcon,
   },
   data() {
     return {
       zoom: 13,
       center: latLng(47.41322, -1.219482),
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 
       icon: icon({
         iconUrl: "static/images/baseball-marker.png",
         iconSize: [32, 37],
-        iconAnchor: [16, 37]
+        iconAnchor: [16, 37],
       }),
       staticAnchor: [16, 37],
       customText: "Foobar",
-      iconSize: 64
+      iconSize: 64,
     };
   },
   computed: {
@@ -95,9 +78,9 @@ export default {
     },
     dynamicAnchor() {
       return [this.iconSize / 2, this.iconSize * 1.15];
-    }
+    },
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

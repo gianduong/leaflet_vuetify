@@ -14,6 +14,16 @@
       >
         <l-icon :icon-size="brew.iconSize" :icon-url="icon" />
       </l-marker>
+      <l-control-layers />
+      <l-wms-tile-layer
+        v-for="layer in layers"
+        :key="layer.name"
+        :base-url="baseUrl"
+        :layers="layer.layers"
+        :visible="layer.visible"
+        :name="layer.name"
+        layer-type="base"
+      />
     </l-map>
   </div>
   <!-- /.row map -->
@@ -40,7 +50,35 @@ export default {
       currentZoom: 7,
       icon: beer,
       iconSize: [15, 15],
+      baseUrl: 'http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+      layers: [
+        {
+          name: 'Weather Data',
+          visible: true,
+          format: 'image/png',
+          layers: 'nexrad-n0r-900913',
+          transparent: true,
+          attribution: "Weather data © 2012 IEM Nexrad"
+        },
+        {
+          name: 'Google map',
+          visible: true,
+          format: 'image/png',
+          layers: 'nexrad-n0r-900913',
+          transparent: true,
+          attribution: "Weather data © 2012 IEM Nexrad"
+        },
+        {
+          name: 'Sasori',
+          visible: true,
+          format: 'image/png',
+          layers: 'nexrad-n0r-900913',
+          transparent: true,
+          attribution: "Weather data © 2012 IEM Nexrad"
+        }
+      ]
     };
+    
   },
   components: {
     LMap,

@@ -16,7 +16,7 @@
         />
       </div>
       <!-- /.col-6 -->
-      <div class="col-8">
+      <div class="col-7 mr-5">
         <BreweriesMap :brew-list="breweries" />
       </div>
       <!-- /.col-6 -->
