@@ -9,6 +9,11 @@ import { LMap, LTileLayer, LMarker, LControl, LControlAttribution, LControlScale
 import { LIcon, LImageOverlay, LLayerGroup, LPolygon, LPolyline, LPopup, LRectangle, LTooltip, LWMSTileLayer } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
+/** VueApexCharts */
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 /**
  * hiển thị icon
  */
@@ -60,6 +65,10 @@ import vd11 from "./components/example/Swiching.vue"
 import vd12 from "./components/example/TooltipShow.vue"
 import vd13 from "./components/example/WMSTileLayer.vue"
 
+import ChartRouter from './components/chart/ChartRouter.vue';
+
+
+
 const router = new VueRouter({
   routes: [
     // dynamic segments start with a colon
@@ -78,8 +87,15 @@ const router = new VueRouter({
     {path:"/vd11", component:vd11},
     {path:"/vd12", component:vd12},
     {path:"/vd0", component:vd13},
+    // chart
+    {path:"/charts", component:ChartRouter},
+    {path: "/statistic", component:LocalMap},
   ]
 })
+
+/** Map */
+import LocalMap from "../src/components/map/LocalMap.vue"
+
 new Vue({
   vuetify,router,
   render: h => h(App)

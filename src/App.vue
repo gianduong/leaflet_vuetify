@@ -7,9 +7,9 @@
       src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
     >
       <Navbar/>
-    </v-navigation-drawer>
-
-    <v-app-bar app src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg">
+    </v-navigation-drawer >
+    <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-model="drawer" :class="{'hidden':drawer}" class="app-bar-show-icon"></v-app-bar-nav-icon>
+    <v-app-bar v-model="drawer" app src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <Header/>
@@ -61,7 +61,8 @@ export default {
 </script>
 <style lang="scss">
 @import "./css/style.scss";
-.hidden{
-  display: hidden !important;
+.app-bar-show-icon{
+  position: absolute !important;
+  z-index: 1000;
 }
 </style>

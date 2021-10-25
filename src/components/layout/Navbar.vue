@@ -14,10 +14,10 @@
     <v-divider class="divider" dark></v-divider>
     <v-list>
       <v-list-item
-        v-for="([icon, text], i) in items"
+        v-for="([icon, text, linkto], i) in items"
         :key="i"
         link
-        to="/Breweries"
+        :to="linkto"
       >
         <v-list-item-icon>
           <v-icon>{{ icon }}</v-icon>
@@ -49,9 +49,9 @@ export default {
   data() {
     return {
       items: [
-        ["mdi-email", "Inbox"],
-        ["mdi-account-supervisor-circle", "Supervisors"],
-        ["mdi-clock-start", "Clock-in"],
+        ["mdi-google-maps","Bản đồ", "/statistic"],
+        ["mdi-beer", "Breweries", "/Breweries"],
+        ["mdi-chart-areaspline", "Charts","/charts"],
       ],
       items2: [
         ["mdi-email", "Ví Dụ 1"],
