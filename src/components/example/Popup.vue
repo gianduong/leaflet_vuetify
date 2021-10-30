@@ -1,5 +1,5 @@
 <template>
-  <l-map style="height: 350px" :zoom="zoom" :center="center">
+  <l-map style="height: 600px" :zoom="zoom" :center="center">
     <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
     <l-marker :lat-lng="markerLatLng">
       <l-popup>Hello!</l-popup>

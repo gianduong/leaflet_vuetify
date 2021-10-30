@@ -9,7 +9,7 @@
         src="../../assets/img/logo.png"
       >
       </v-img>
-      <v-list-item-content class="name-project">Giản Dương</v-list-item-content>
+      <v-list-item-content class="name-project">GISMap</v-list-item-content>
     </v-list-item>
     <v-divider class="divider" dark></v-divider>
     <v-list>
@@ -78,8 +78,10 @@ export default {
 }
 .name-project {
   text-transform: uppercase;
-  font-size: 19px;
-  margin-left: 10px;
+  font-size: 22px;
+  margin-left: 20px;
+  color: teal;
+  font-weight: 700;
 }
 .divider {
   margin-top: 5px;

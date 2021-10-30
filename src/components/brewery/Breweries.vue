@@ -44,7 +44,7 @@ export default {
   mounted: function () {
     axios.get("https://api.openbrewerydb.org/breweries").then((r) => {
       this.breweries = r.data
-        // .filter((r) => (r.state = "Arizona"))
+        .filter((r) => (r.latitude != null, r.longitude != null))
         .map((r) => {
           r.iconSize = this.normalIcon;
           return r;

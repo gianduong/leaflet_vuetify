@@ -1,0 +1,35 @@
+$sizes: 16px, 24px, 32px;
+@each $size in $sizes {
+  .mi-#{$size} {
+    font-size: $size;
+    height: $size;
+    width: $size;
+  }
+}
+.mi {
+    background-image: url("./assets/img/spritesheet.a4e0eb7.svg");
+    background-repeat: no-repeat;
+}
+.border{
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+// list icon
+.icon-draw-polyline{
+    background-position: -18px -18px;
+}
+.icon-draw-polygon{
+    background-position: -76px -18px;
+} 
+.icon-draw-rectangle{
+    background-position: -138px -20px;
+}
+.icon-draw-circle{
+    background-position: -198px -19px;
+}
+.icon-edit{
+    background-position: -318px -16px;
+}
+.icon-remove{
+    background-position: -379px -16px;
+}

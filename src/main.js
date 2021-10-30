@@ -30,22 +30,22 @@ Vue.component('l-map', LMap); // bản đồ
 Vue.component('l-tile-layer', LTileLayer); // thông tin về map. vd url, attribution
 Vue.component('l-marker', LMarker); // điểm maker
 Vue.component('l-control', LControl), // button tùy chọn
-Vue.component('l-control-attribution', LControlAttribution), // thông tin về map
-Vue.component('l-control-layers', LControlLayers), // thay đổi map
-Vue.component('l-control-zoom', LControlZoom), // zoom
-Vue.component('l-feature-group', LFeatureGroup), // nhóm các yếu tố dùng chung. vd dùng chung một định dạng tooltip
-Vue.component('l-geo-json', LGeoJson), // LGeoJson?
-Vue.component('l-icon', LIcon), // 
-Vue.component('l-image-overlay', LImageOverlay), // sử dụng hình ảnh thay map
-Vue.component('l-layer-group', LLayerGroup), // ‎Nhóm các yếu tố của bản đồ bao gồm: đánh dấu, geoJSON, đa giác và đa giác, tooltip và popup.‎
-Vue.component('l-polygon', LPolygon), // hình khép kín
-Vue.component('l-polyline', LPolyline), // các đường
-Vue.component('l-popup', LPopup), // 
-Vue.component('l-rectangle', LRectangle), // 
-Vue.component('l-tooltip', LTooltip), // 
-Vue.component('l-wms-tile-layer', LWMSTileLayer), // lớp lát, biểu diễn nhiệt, đọ cao..
-Vue.component('', LControlScale), // khoảng cách bao nhiêu km ... khi zoom
-Vue.config.productionTip = false
+  Vue.component('l-control-attribution', LControlAttribution), // thông tin về map
+  Vue.component('l-control-layers', LControlLayers), // thay đổi map
+  Vue.component('l-control-zoom', LControlZoom), // zoom
+  Vue.component('l-feature-group', LFeatureGroup), // nhóm các yếu tố dùng chung. vd dùng chung một định dạng tooltip
+  Vue.component('l-geo-json', LGeoJson), // LGeoJson?
+  Vue.component('l-icon', LIcon), // 
+  Vue.component('l-image-overlay', LImageOverlay), // sử dụng hình ảnh thay map
+  Vue.component('l-layer-group', LLayerGroup), // ‎Nhóm các yếu tố của bản đồ bao gồm: đánh dấu, geoJSON, đa giác và đa giác, tooltip và popup.‎
+  Vue.component('l-polygon', LPolygon), // hình khép kín
+  Vue.component('l-polyline', LPolyline), // các đường
+  Vue.component('l-popup', LPopup), // 
+  Vue.component('l-rectangle', LRectangle), // 
+  Vue.component('l-tooltip', LTooltip), // 
+  Vue.component('l-wms-tile-layer', LWMSTileLayer), // lớp lát, biểu diễn nhiệt, đọ cao..
+  Vue.component('', LControlScale), // khoảng cách bao nhiêu km ... khi zoom
+  Vue.config.productionTip = false
 Vue.use(VueRouter)
 /** import router */
 import Breweries from "./components/brewery/Breweries.vue"
@@ -72,31 +72,53 @@ import ChartRouter from './components/chart/ChartRouter.vue';
 const router = new VueRouter({
   routes: [
     // dynamic segments start with a colon
-    {path: '*', component: Catch404 }, // bắt 404
-    {path: "/Breweries", component:Breweries},
-    {path:"/vd1", component:vd1},
-    {path:"/vd2", component:vd2},
-    {path:"/vd3", component:vd3},
-    {path:"/vd4", component:vd4},
-    {path:"/vd5", component:vd5},
-    {path:"/vd6", component:vd6},
-    {path:"/vd7", component:vd7},
-    {path:"/vd8", component:vd8},
-    {path:"/vd9", component:vd9},
-    {path:"/vd10", component:vd10},
-    {path:"/vd11", component:vd11},
-    {path:"/vd12", component:vd12},
-    {path:"/vd0", component:vd13},
+    { path: '*', component: Catch404 }, // bắt 404
+    { path: "/Breweries", component: Breweries },
+    { path: "/vd1", component: vd1 },
+    { path: "/vd2", component: vd2 },
+    { path: "/vd3", component: vd3 },
+    { path: "/vd4", component: vd4 },
+    { path: "/vd5", component: vd5 },
+    { path: "/vd6", component: vd6 },
+    { path: "/vd7", component: vd7 },
+    { path: "/vd8", component: vd8 },
+    { path: "/vd9", component: vd9 },
+    { path: "/vd10", component: vd10 },
+    { path: "/vd11", component: vd11 },
+    { path: "/vd12", component: vd12 },
+    { path: "/vd0", component: vd13 },
     // chart
-    {path:"/charts", component:ChartRouter},
-    {path: "/statistic", component:LocalMap},
+    { path: "/charts", component: ChartRouter },
+    { path: "/statistic", component: LocalMap },
+    {
+      path: '/statistic', component: LocalMap,
+      children: [
+        {
+          path: 'DataHeader', component: DataHeader
+        },
+        {
+          path: 'InfoDetail', component: InfoDetail
+        },
+        {
+          path: 'SearchList', component: SearchList
+        },
+        
+      ]
+    },
+  //   {
+  //     path: '/Login', component: Login 
+  //  }
   ]
 })
 
 /** Map */
 import LocalMap from "../src/components/map/LocalMap.vue"
+import DataHeader from "./components/map/navbar-map/DataHeader.vue";
+import InfoDetail from "./components/map/navbar-map/InfoDetail.vue";
+import SearchList from "./components/map/navbar-map/SearchList.vue";
+// import Login from "./components/layout/CardLogin.vue"
 
 new Vue({
-  vuetify,router,
+  vuetify, router,
   render: h => h(App)
 }).$mount('#app')

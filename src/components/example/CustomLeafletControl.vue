@@ -11,9 +11,9 @@
         :attribution="attribution"
       />
       <l-control class="example-custom-control">
-        <p @click="showAlert">
+        <button @click="showAlert">
           Click me
-        </p>
+        </button>
       </l-control>
       <l-control
         :position="'bottomleft'"

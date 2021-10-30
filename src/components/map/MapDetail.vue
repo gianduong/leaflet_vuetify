@@ -1,19 +1,27 @@
 <template>
-  <div class="row map">
+
+  <div >
     <l-map
-      @update:zoom="zoomUpdate"
-      @update:center="centerUpdate"
       :zoom="zoom"
       :center="center"
+      style="height: 500px; width: 100%"
     >
-      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <l-marker
-        :key="index"
-        v-for="(brew, index) in brewList"
-        :lat-lng="latLng(brew.latitude, brew.longitude)"
+      <l-tile-layer
+        :url="url"
+        :attribution="attribution"
+      />
+      <l-control class="example-custom-control" :position="'topleft'">
+        <div class="mi border mi-24px icon-draw-polyline"></div>
+        <div class="mi border mi-24px icon-draw-polygon"></div>
+        <div class="mi border mi-24px icon-draw-rectangle"></div>
+        <div class="mi border mi-24px icon-draw-circle"></div>
+      </l-control>
+      <l-control
+        :position="'bottomleft'"
+        class="custom-control-watermark"
       >
-        <l-icon :icon-size="brew.iconSize" :icon-url="icon" />
-      </l-marker>
+        Vue2Leaflet Watermark Control
+      </l-control>
       <l-control-layers />
       <l-wms-tile-layer
         v-for="layer in layers"
@@ -26,30 +34,26 @@
       />
     </l-map>
   </div>
-  <!-- /.row map -->
 </template>
 
 <script>
-/* eslint-disable no-undef */
-
-import { LMap, LTileLayer, LMarker, LIcon } from "vue2-leaflet";
-import beer from "../../assets/img/beer_selected.png";
+import { latLng } from "leaflet";
+import { LMap, LTileLayer, LControl } from "vue2-leaflet";
 
 export default {
-  name: "BreweriesMap",
-  props: ["brewList"],
-  data: function () {
+  name: "Example",
+  components: {
+    LMap,
+    LTileLayer,
+    LControl
+  },
+  data() {
     return {
-      center: L.latLng(33.683295, -111.930685),
-      url: "http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+      zoom: 13,
+      center: latLng(47.41322, -1.219482),
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      marker: L.latLng(47.41322, -1.219482),
-      zoom: 7,
-      currentCenter: L.latLng(47.41322, -1.219482),
-      currentZoom: 7,
-      icon: beer,
-      iconSize: [15, 15],
       baseUrl: 'http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
       layers: [
         {
@@ -78,32 +82,26 @@ export default {
         }
       ]
     };
-    
-  },
-  components: {
-    LMap,
-    LTileLayer,
-    LMarker,
-    LIcon,
   },
   methods: {
-    latLng: function (lat, lng) {
-      if(lat != null && lat != "" && lng != null && lng != "" )
-      return L.latLng(lat, lng);
-    },
-
-    centerUpdate: function (center) {
-      this.currentCenter = center;
-    },
-    zoomUpdate: function (zoom) {
-      this.currentZoom = zoom;
-    },
-  },
+    showAlert() {
+      alert("Click!");
+    }
+  }
 };
 </script>
 
-<style type="scss" scoped>
-.map {
-  height: 80vh;
+<style>
+.example-custom-control {
+  background: #fff;
+  padding: 0 0.5em;
+  border: 1px solid #aaa;
+  border-radius: 0.1em;
+}
+.custom-control-watermark {
+  font-size: 200%;
+  font-weight: bolder;
+  color: #aaa;
+  text-shadow: #555;
 }
 </style>

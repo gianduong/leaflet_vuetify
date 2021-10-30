@@ -40,19 +40,35 @@ $color-write: #fff;
 		color-stop(0.86, rgb(28, 58, 148))
 	);
 }
+
+/* v-text-field*/
+.theme--light.v-label {
+    font-family: "notosans-regular";
+    font-weight: 400;
+    font-size: 17px;
+}
 // component
 .component{
 	margin-left: 30px;
 }
 // ChartRouter
 .chart-list{
-	@include flex-center;
-	flex-wrap:wrap;
+	// @include flex-center;
+	// flex-wrap:wrap;
+	// .chart{
+	// 	@include WidthHeight(550px,400px);
+	// 	margin: 20px;
+	// 	border: 1px solid rgb(73, 125, 189);
+	// }
+	display: grid;
+	grid-gap: 36px;
+	grid-template-columns: repeat( auto-fit, minmax(550px, 1fr) );
 	.chart{
-		@include WidthHeight(550px,400px);
-		margin: 20px;
-		border: 1px solid rgb(73, 125, 189);
+		// @include WidthHeight(550px,400px);
+	 	// margin: 20px;
+	 	border: 1px solid rgb(73, 125, 189);
 	}
+
 }
 /*map*/
 /*header*/
@@ -62,8 +78,9 @@ $color-write: #fff;
 	//background: url("https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg");
 	position: sticky;
 	top: 0;
-	left: 20px;
+	left: 0;
 	z-index: 100;
 	@include flex-center();
 	justify-content: space-between;
+	margin-bottom: 20px;
 }
