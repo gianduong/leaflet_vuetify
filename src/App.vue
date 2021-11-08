@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      width="220"
       v-model="drawer"
       app
       dark
@@ -131,6 +132,7 @@ export default {
 
   data: () => ({
     drawer: true,
+    fav: false,
     group: null,
     dialog: false,login:false,logout:true
   }),

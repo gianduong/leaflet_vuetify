@@ -14,14 +14,13 @@ $color-write: #fff;
 }
 .hidden {
 	display: none !important;
-  }
-  
+}
 
 /*----navbar------*/
-/*----scroll----*/
+// #region scroll
 ::-webkit-scrollbar {
-	width: 10px;
-	background-color: #F5F5F5;
+	width: 5px;
+	background-color: #f5f5f5;
 }
 ::-webkit-scrollbar-track {
 	//-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -40,19 +39,20 @@ $color-write: #fff;
 		color-stop(0.86, rgb(28, 58, 148))
 	);
 }
-
+// #endregion
 /* v-text-field*/
 .theme--light.v-label {
-    font-family: "notosans-regular";
-    font-weight: 400;
-    font-size: 17px;
+	font-family: "notosans-regular";
+	font-weight: 400;
+	font-size: 17px;
 }
+
+// #region ChartRouter
 // component
-.component{
+.component {
 	margin-left: 30px;
 }
-// ChartRouter
-.chart-list{
+.chart-list {
 	// @include flex-center;
 	// flex-wrap:wrap;
 	// .chart{
@@ -60,19 +60,29 @@ $color-write: #fff;
 	// 	margin: 20px;
 	// 	border: 1px solid rgb(73, 125, 189);
 	// }
-	display: grid;
-	grid-gap: 36px;
-	grid-template-columns: repeat( auto-fit, minmax(550px, 1fr) );
-	.chart{
-		// @include WidthHeight(550px,400px);
-	 	// margin: 20px;
-	 	border: 1px solid rgb(73, 125, 189);
+	// display: grid;
+	// grid-gap: 36px;
+	// grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+	display: flex;
+	margin-bottom: 20px;
+	.chart {
+		@include WidthHeight(800px, 450px);
+		margin: 20px 0 120px 0;
 	}
-
+	.date-time {
+		margin: 50px auto;
+		border: 1px solid #eceff1;
+	}
 }
-/*map*/
+.table-title {
+	margin: 5px 10px;
+	font-size: 21px;
+	font-weight: 700;
+}
+// #endregion
+
 /*header*/
-.header{
+.header {
 	height: 60px;
 	width: 100%;
 	//background: url("https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg");
@@ -84,3 +94,136 @@ $color-write: #fff;
 	justify-content: space-between;
 	margin-bottom: 20px;
 }
+// #region loading
+.loading {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	border-radius: 50%;
+	z-index: 10000;
+	.loading-son {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		position: absolute;
+	}
+	.loading-son:first-child {
+		animation: xoay 1s infinite;
+		background-color: red;
+	}
+	.loading-son:nth-child(2) {
+		animation: xoay3 1s infinite;
+	}
+	.loading-son:last-child {
+		animation: xoay2 1s infinite;
+		background-color: teal;
+	}
+}
+@keyframes xoay {
+	0% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	50% {
+		opacity: 1;
+		transform: translateX(60px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+@keyframes xoay2 {
+	0% {
+		opacity: 1;
+		transform: translateX(60px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(60px);
+		z-index: -1;
+	}
+}
+@keyframes xoay3 {
+	0% {
+		opacity: 0;
+		transform: translateX(30px);
+	}
+	20% {
+		opacity: 1;
+		background-color: #4867ff;
+		transform: translateX(30px);
+	}
+	30% {
+		opacity: 1;
+		transform: translateX(30px);
+		background-color: #4867ff;
+	}
+	50% {
+		opacity: 0;
+		transform: translateX(30px);
+	}
+	70% {
+		opacity: 1;
+		transform: translateX(30px);
+		background-color: #46a00a;
+	}
+	80% {
+		opacity: 1;
+		transform: translateX(30px);
+		background-color: #46a00a;
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(30px);
+	}
+}
+.loading-rotate {
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	border-radius: 50%;
+	border: 7px solid teal;
+	z-index: 10000;
+	transform: translate(-50%, -50%);
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	animation: xoay-rotate 0.8s infinite linear;
+}
+@mixin border-color($data) {
+	border-top: 7px solid $data;
+	border-bottom: 7px solid $data;
+}
+@keyframes xoay-rotate {
+	0% {
+		@include border-color(#f53838);
+		transform: rotate(0deg);
+	}
+	20% {
+		@include border-color(#db810b);
+		transform: rotate(60deg);
+	}
+	40% {
+		transform: rotate(120deg);
+		@include border-color(#32d600);
+	}
+	60% {
+		transform: rotate(180deg);
+		@include border-color(#007da3);
+	}
+	80% {
+		transform: rotate(240deg);
+		@include border-color(#003088);
+	}
+	100% {
+		transform: rotate(360deg);
+		@include border-color(#740074);
+	}
+}
+// #endregion

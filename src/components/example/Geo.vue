@@ -1,34 +1,16 @@
 <template>
- <div>
+  <div>
     <div>
       <span v-if="loading">Loading...</span>
       <label for="checkbox">GeoJSON Visibility</label>
-      <input
-        id="checkbox"
-        v-model="show"
-        type="checkbox"
-      >
+      <input id="checkbox" v-model="show" type="checkbox" />
       <label for="checkboxTooltip">Enable tooltip</label>
-      <input
-        id="checkboxTooltip"
-        v-model="enableTooltip"
-        type="checkbox"
-      >
-      <input
-        v-model="fillColor"
-        type="color"
-      >
-      <br>
+      <input id="checkboxTooltip" v-model="enableTooltip" type="checkbox" />
+      <input v-model="fillColor" type="color" />
+      <br />
     </div>
-    <l-map
-      :zoom="zoom"
-      :center="center"
-      style="height: 500px; width: 100%"
-    >
-      <l-tile-layer
-        :url="url"
-        :attribution="attribution"
-      />
+    <l-map :zoom="zoom" :center="center" style="height: 500px; width: 100%">
+      <l-tile-layer :url="url" :attribution="attribution" />
       <l-geo-json
         v-if="show"
         :geojson="geojson"
@@ -50,7 +32,7 @@ export default {
     LMap,
     LTileLayer,
     LGeoJson,
-    LMarker
+    LMarker,
   },
   data() {
     return {
@@ -61,16 +43,16 @@ export default {
       center: [48, -1.219482],
       geojson: null,
       fillColor: "#e4ce7f",
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      url: "http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      marker: latLng(47.41322, -1.219482)
+      marker: latLng(47.41322, -1.219482),
     };
   },
   computed: {
     options() {
       return {
-        onEachFeature: this.onEachFeatureFunction
+        onEachFeature: this.onEachFeatureFunction,
       };
     },
     styleFunction() {
@@ -81,7 +63,7 @@ export default {
           color: "#ECEFF1",
           opacity: 1,
           fillColor: fillColor,
-          fillOpacity: 1
+          fillOpacity: 1,
         };
       };
     },
@@ -99,14 +81,16 @@ export default {
           { permanent: false, sticky: true }
         );
       };
-    }
+    },
   },
   async created() {
     this.loading = true;
-    const response = await fetch("https://rawgit.com/gregoiredavid/france-geojson/master/regions/pays-de-la-loire/communes-pays-de-la-loire.geojson")
+    const response = await fetch(
+      "https://rawgit.com/gregoiredavid/france-geojson/master/regions/pays-de-la-loire/communes-pays-de-la-loire.geojson"
+    );
     const data = await response.json();
     this.geojson = data;
     this.loading = false;
-  }
+  },
 };
 </script>

@@ -48,11 +48,11 @@
             <v-icon>mdi-map-search</v-icon>
           </v-btn>
 
-          <v-btn @click="value = 3" to="/statistic/InfoDetail">
+          <!-- <v-btn @click="value = 3" to="/statistic/InfoDetail">
             <span>Chi tiết</span>
 
             <v-icon>mdi-axis-arrow-info</v-icon>
-          </v-btn>
+          </v-btn> -->
         </v-bottom-navigation>
         <div class="info-detail">
           <div v-if="value == 1"><DataHeader :items="listDataheader" /></div>
@@ -220,8 +220,8 @@ export default {
     @include wh(30%, 100%);
     margin-right: 1%;
     .info-detail {
-      @include wh(100%, 650px);
-      overflow-y: scroll;
+      @include wh(100%, 440px);
+      overflow: scroll;
       &::-webkit-scrollbar {
         width: 0;
         background-color: #f5f5f5;

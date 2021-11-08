@@ -14,8 +14,8 @@
     <v-divider class="divider" dark></v-divider>
     <v-list>
       <v-list-item
-        v-for="([icon, text, linkto], i) in items"
-        :key="i"
+        v-for="([icon, text, linkto, item]) in items"
+        :key="item"
         link
         :to="linkto"
       >
@@ -49,9 +49,9 @@ export default {
   data() {
     return {
       items: [
-        ["mdi-google-maps","Bản đồ", "/statistic"],
-        ["mdi-beer", "Breweries", "/Breweries"],
-        ["mdi-chart-areaspline", "Charts","/charts"],
+        ["mdi-google-maps","Bản đồ", "/statistic", "a"],
+        ["mdi-beer", "Breweries", "/Breweries","b"],
+        ["mdi-chart-areaspline", "Charts","/charts","c"],
       ],
       items2: [
         ["mdi-email", "Ví Dụ 1"],
@@ -72,7 +72,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .logo {
   height: 60px;
 }
