@@ -35,12 +35,14 @@
           </v-btn>
         </template>
 
-        <v-card :class="{'hidden':login}">
+        <v-card :class="{ hidden: login }">
           <v-list>
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>ĐĂNG NHẬP</v-list-item-title>
-                <v-list-item-subtitle>Đăng nhập để sử dụng dịch vụ</v-list-item-subtitle>
+                <v-list-item-subtitle
+                  >Đăng nhập để sử dụng dịch vụ</v-list-item-subtitle
+                >
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -59,13 +61,20 @@
 
             <v-list-item>
               <v-text-field
+                v-model="password"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="showPassword ? 'text' : 'password'"
+                name="input-10-1"
+                label="Mật khẩu"
+                hint="Ít nhất 8 ký tự"
+                
                 dense
                 outlined
-                label="Mật khẩu"
-                type="password"
                 color="teal"
                 clearable
                 clear-icon="mdi-close-circle-outline"
+                @click:append="showPassword = !showPassword"
               ></v-text-field>
             </v-list-item>
           </v-list>
@@ -73,10 +82,16 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text @click="dialog = false"> Đóng </v-btn>
-            <v-btn color="primary" text @click="login = true,logout = false, dialog = false"> Login </v-btn>
+            <v-btn
+              color="primary"
+              text
+              @click="(login = true), (logout = false), (dialog = false)"
+            >
+              Login
+            </v-btn>
           </v-card-actions>
         </v-card>
-        <v-card :class="{'hidden':logout}">
+        <v-card :class="{ hidden: logout }">
           <v-list>
             <v-list-item>
               <v-list-item-avatar>
@@ -101,7 +116,12 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="login = false,logout = true, dialog = false"> Đăng xuất </v-btn>
+            <v-btn
+              text
+              @click="(login = false), (logout = true), (dialog = false)"
+            >
+              Đăng xuất
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -134,7 +154,16 @@ export default {
     drawer: true,
     fav: false,
     group: null,
-    dialog: false,login:false,logout:true
+    dialog: false,
+    login: false,
+    logout: true,
+    showPassword: false,
+    password: "",
+    rules: {
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
+      emailMatch: () => `The email and password you entered don't match`,
+    },
   }),
   watch: {
     group() {
@@ -148,5 +177,11 @@ export default {
 .app-bar-show-icon {
   position: absolute !important;
   z-index: 1000;
+}
+.v-application ul, .v-application ol {
+    padding-left: 0px;
+}
+.leaflet-draw-toolbar.leaflet-control-toolbar {
+    margin-top: 0px !important;
 }
 </style>

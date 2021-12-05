@@ -14,7 +14,7 @@
     <v-divider class="divider" dark></v-divider>
     <v-list>
       <v-list-item
-        v-for="([icon, text, linkto, item]) in items"
+        v-for="[icon, text, linkto, item] in items"
         :key="item"
         link
         :to="linkto"
@@ -27,7 +27,7 @@
           <v-list-item-title>{{ text }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item
+      <!-- <v-list-item
         v-for="([icon, text], i) in items2"
         :key="i"
         link
@@ -40,7 +40,7 @@
         <v-list-item-content>
           <v-list-item-title>{{ text }}</v-list-item-title>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
     </v-list>
   </div>
 </template>
@@ -49,9 +49,9 @@ export default {
   data() {
     return {
       items: [
-        ["mdi-google-maps","Bản đồ", "/statistic", "a"],
-        ["mdi-beer", "Breweries", "/Breweries","b"],
-        ["mdi-chart-areaspline", "Charts","/charts","c"],
+        ["mdi-google-maps", "Bản đồ", "/statistic/DataHeader", "a"],
+        //["mdi-beer", "Breweries", "/Breweries", "b"],
+        ["mdi-chart-areaspline", "Charts", "/charts", "c"],
       ],
       items2: [
         ["mdi-email", "Ví Dụ 1"],
@@ -72,7 +72,11 @@ export default {
   },
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
+.v-list .v-list-item--active {
+  color: #00ffbf !important;
+  background-color: #025cba;
+}
 .logo {
   height: 60px;
 }

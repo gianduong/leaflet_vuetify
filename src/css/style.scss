@@ -66,12 +66,12 @@ $color-write: #fff;
 	display: flex;
 	margin-bottom: 20px;
 	.chart {
-		@include WidthHeight(800px, 450px);
-		margin: 20px 0 120px 0;
+		width: 70%;
+		margin: 20px 0 0 0;
 	}
 	.date-time {
-		margin: 50px auto;
-		border: 1px solid #eceff1;
+		width: 25%;
+		margin: 80px auto;
 	}
 }
 .table-title {
@@ -224,6 +224,20 @@ $color-write: #fff;
 	100% {
 		transform: rotate(360deg);
 		@include border-color(#740074);
+	}
+}
+// #endregion
+// #region Toast
+.base-toast {
+	.toast-content {
+		display: flex;
+		align-content: center;
+		text-align: center;
+		span {
+			margin: auto 5px;
+			font-size: 14px;
+			font-weight: 500;
+		}
 	}
 }
 // #endregion

@@ -26,6 +26,7 @@ L.Icon.Default.mergeOptions({
 /**
  * list component
  */
+
 Vue.component('l-map', LMap); // bản đồ
 Vue.component('l-tile-layer', LTileLayer); // thông tin về map. vd url, attribution
 Vue.component('l-marker', LMarker); // điểm maker

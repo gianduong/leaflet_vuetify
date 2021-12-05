@@ -8,6 +8,7 @@
       right
       light
       transition="slide-x-reverse-transition"
+      class="base-toast"
     >
       <div class="toast-content">
         <div
@@ -30,94 +31,146 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-card class="geo-detail" :class="{ hidden: !isShowLayerInfo }">
+      <v-system-bar color="#F5F5F5" dark>
+        <v-spacer></v-spacer>
+
+        <v-icon color="#111">mdi-window-minimize</v-icon>
+
+        <v-icon color="#111">mdi-window-maximize</v-icon>
+
+        <v-icon color="#111" @click="isShowLayerInfo = false">mdi-close</v-icon>
+      </v-system-bar>
+      <v-app-bar dark color="#f5f5f5">
+        <v-app-bar-nav-icon style="color: #111"></v-app-bar-nav-icon>
+
+        <v-toolbar-title class="title"
+          >Chi tiết khu nông nghiệp</v-toolbar-title
+        >
+
+        <v-spacer></v-spacer>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mt-2"
+              icon
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+              @click="handleGetLayerCenter"
+            >
+              <v-icon color="#111">mdi-magnify</v-icon>
+            </v-btn>
+          </template>
+          <span>Trỏ tới vị trí trực tiếp</span>
+        </v-tooltip>
+      </v-app-bar>
+      <v-container>
+        <v-row dense>
+          <v-col cols="12">
+            <v-card color="#385F73" dark>
+              <v-card-title class="text-h5"> Thông tin chi tiết </v-card-title>
+
+              <div class="info-layer">
+                <span>Tên khu vực:</span>
+                <span> {{ nameDetail }}</span>
+              </div>
+              <div class="info-layer">
+                <span>Vị trí:</span>
+                <span>{{ latLngDetail }}</span>
+              </div>
+              <div class="info-layer">
+                <span>Code:</span>
+                <span>{{ codeDetail }}</span>
+              </div>
+            </v-card>
+          </v-col>
+          <span class="span-conclude"
+            >Chỉ số chất lượng không khí: 122.4715</span
+          >
+          <v-col cols="12">
+            <v-card dark>
+              <v-img src="../../assets/img/nongnghiep.jpg"></v-img>
+            </v-card>
+          </v-col>
+          <span class="span-img">
+            <span class="span-img-info">Ảnh minh họa</span>
+            <span class="span-img-name">garden city</span>
+          </span>
+        </v-row>
+      </v-container>
+    </v-card>
     <l-map
       :zoom="zoom"
       :center="center"
       style="height: 500px; width: 100%"
-      ref="myMapRef"
+      ref="map"
       @click="onMapClick"
+      :options="{ zoomControl: false }"
     >
+      <l-control-polyline-measure
+        :options="{ showUnitControl: false }"
+        position="topleft"
+      />
+      <l-draw-toolbar position="topleft" />
+      <l-freedraw v-model="polygons" :mode="mode" />
       <l-control-zoom :position="'bottomright'"></l-control-zoom>
       <l-control-scale :imperial="imperial" :position="'topright'" />
-      <l-geo-json
-        v-if="show"
-        :geojson="geojson"
-        :options="mapOptions"
-        :options-style="styleFunction"
-        ref="geo"
+      <l-popup ref="popup">hihi</l-popup>
+
+      <l-control-layers />
+      <l-wms-tile-layer
+        v-for="layer in layers"
+        :key="layer.name"
+        :base-url="layer.baseUrl"
+        :layers="layer.layers"
+        :visible="layer.visible"
+        :name="layer.name"
+        layer-type="base"
+        :url="layer.url"
+      />
+
+      <l-layer-group layer-type="overlay" name="Layer polyline">
+        <l-polyline
+          v-for="item in polylines"
+          :key="item.id"
+          :lat-lngs="item.points"
+          :visible="item.visible"
+        />
+      </l-layer-group>
+      <l-layer-group
+        v-for="item in stuff"
+        :key="item.id"
+        :visible.sync="item.visible"
+        layer-type="overlay"
+        name="Layer 1"
       >
-        <l-popup ref="popup">This is a popup open by default</l-popup>
-      </l-geo-json>
-      <l-control class="custom-control icon-middle" :position="'topleft'">
-        <v-tooltip bottom z-index="1000" open-delay="400">
-          <template v-slot:activator="{ on, attrs }">
-            <div v-bind="attrs" v-on="on" class="mi-16px icon-length"></div>
-          </template>
-          <span>Đo khoảng cách và diện tích</span>
-        </v-tooltip>
-      </l-control>
-      <l-control class="custom-control" :position="'topleft'">
-        <v-tooltip bottom z-index="1000" open-delay="400">
-          <template v-slot:activator="{ on, attrs }">
-            <div
-              v-bind="attrs"
-              v-on="on"
-              class="mi border mi-30px icon-draw-polyline"
-            ></div>
-          </template>
-          <span>Vẽ polyline</span>
-        </v-tooltip>
+        <l-layer-group :visible="item.markersVisible">
+          <l-marker
+            v-for="marker in item.markers"
+            :key="marker.id"
+            :visible="marker.visible"
+            :draggable="marker.draggable"
+            :lat-lng="marker.position"
+          />
+        </l-layer-group>
+        <l-polyline
+          :lat-lngs="item.polyline.points"
+          :visible="item.polyline.visible"
+        />
+      </l-layer-group>
+      <l-control class="custom-control" :position="'topright'">
         <v-tooltip bottom z-index="1000" open-delay="400">
           <template v-slot:activator="{ on, attrs }">
             <div
               v-bind="attrs"
               v-on="on"
               class="mi border mi-30px icon-draw-polygon"
+              @click="flipActive"
             ></div>
           </template>
           <span>Vẽ Polygon</span>
-        </v-tooltip>
-        <v-tooltip bottom z-index="1000" open-delay="400">
-          <template v-slot:activator="{ on, attrs }">
-            <div
-              v-bind="attrs"
-              v-on="on"
-              class="mi border mi-30px icon-draw-rectangle"
-            ></div>
-          </template>
-          <span>Vẽ hình chữ nhật</span>
-        </v-tooltip>
-        <v-tooltip bottom z-index="1000" open-delay="400">
-          <template v-slot:activator="{ on, attrs }">
-            <div
-              v-bind="attrs"
-              v-on="on"
-              class="mi border mi-30px icon-draw-circle"
-            ></div>
-          </template>
-          <span>Vẽ hình tròn</span>
-        </v-tooltip>
-      </l-control>
-      <l-control class="custom-control" :position="'topleft'">
-        <v-tooltip bottom z-index="1000" open-delay="400">
-          <template v-slot:activator="{ on, attrs }">
-            <div
-              v-bind="attrs"
-              v-on="on"
-              class="mi border mi-30px icon-edit"
-            ></div>
-          </template>
-          <span>Chỉnh sửa hình đã vẽ</span>
-        </v-tooltip>
-        <v-tooltip bottom z-index="1000" open-delay="400">
-          <template v-slot:activator="{ on, attrs }">
-            <div
-              v-bind="attrs"
-              v-on="on"
-              class="mi border mi-30px icon-remove"
-            ></div>
-          </template>
-          <span>Xóa hình đã vẽ</span>
         </v-tooltip>
         <v-tooltip bottom z-index="1000" open-delay="400">
           <template v-slot:activator="{ on, attrs }">
@@ -161,87 +214,14 @@
           <span>Đổi màu</span>
         </v-tooltip>
       </l-control>
-      <l-control-layers />
-      <l-wms-tile-layer
-        v-for="layer in layers"
-        :key="layer.name"
-        :base-url="layer.baseUrl"
-        :layers="layer.layers"
-        :visible="layer.visible"
-        :name="layer.name"
-        layer-type="base"
-      />
+      <l-geo-json
+        v-if="show"
+        :geojson="geojson"
+        :options="mapOptions"
+        :options-style="styleFunction"
+        ref="geo"
+      ></l-geo-json>
     </l-map>
-    <v-card class="geo-detail" :class="{ hidden: !isShowLayerInfo }">
-      <v-system-bar color="#F5F5F5" dark>
-        <v-spacer></v-spacer>
-
-        <v-icon color="#111">mdi-window-minimize</v-icon>
-
-        <v-icon color="#111">mdi-window-maximize</v-icon>
-
-        <v-icon color="#111" @click="isShowLayerInfo = false">mdi-close</v-icon>
-      </v-system-bar>
-      <v-app-bar dark color="#f5f5f5">
-        <v-app-bar-nav-icon style="color: #111"></v-app-bar-nav-icon>
-
-        <v-toolbar-title style="color: #111"
-          >Chi tiết về khu nông nghiệp</v-toolbar-title
-        >
-
-        <v-spacer></v-spacer>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mt-2"
-              icon
-              color="primary"
-              dark
-              v-bind="attrs"
-              v-on="on"
-              @click="handleGetLayerCenter"
-            >
-              <v-icon color="#111">mdi-magnify</v-icon>
-            </v-btn>
-          </template>
-          <span>Trỏ tới vị trí trực tiếp</span>
-        </v-tooltip>
-      </v-app-bar>
-      <v-container>
-        <v-row dense>
-          <v-col cols="12">
-            <v-card color="#385F73" dark>
-              <v-card-title class="text-h5"> Thông tin chi tiết </v-card-title>
-
-              <div class="info-layer">
-                <span>Tên khu vực:</span>
-                <span> {{ nameDetail }}</span>
-              </div>
-              <div class="info-layer">
-                <span>Vị trí:</span>
-                <span>{{ latLngDetail }}</span>
-              </div>
-              <div class="info-layer">
-                <span>Code:</span>
-                <span>{{ codeDetail }}</span>
-              </div>
-            </v-card>
-          </v-col>
-          <span class="span-conclude"
-            >Chỉ số chất lượng không khí: 122.47156524658203</span
-          >
-          <v-col cols="12">
-            <v-card dark>
-              <v-img src="../../assets/img/nongnghiep.jpg"></v-img>
-            </v-card>
-          </v-col>
-          <span class="span-img">
-            <span class="span-img-info">Ảnh minh họa</span>
-            <span class="span-img-name">garden city</span>
-          </span>
-        </v-row>
-      </v-container>
-    </v-card>
   </div>
 </template>
 
@@ -249,11 +229,75 @@
 import { latLng } from "leaflet";
 // import axios from "axios";
 // import L from "leaflet";
-import { getGeoDatas } from "../../api/baseApi";
+import { getGeoDatas, getGeoDatas2 } from "../../api/baseApi";
 import notify from "../../utils/userMessage";
 // import { LPopup } from 'vue2-leaflet';
+import LControlPolylineMeasure from "vue2-leaflet-polyline-measure";
+import LFreedraw from "vue2-leaflet-freedraw";
+import { ALL, NONE } from "leaflet-freedraw";
+import LDrawToolbar from "vue2-leaflet-draw-toolbar";
+const markers1 = [
+  {
+    position: { lng: -1.219482, lat: 47.41322 },
+    visible: true,
+    draggable: true,
+  },
+  { position: { lng: -1.571045, lat: 47.457809 } },
+  { position: { lng: -1.560059, lat: 47.739323 } },
+  { position: { lng: -0.922852, lat: 47.886881 } },
+  { position: { lng: -0.769043, lat: 48.231991 } },
+  { position: { lng: 0.395508, lat: 48.268569 } },
+  { position: { lng: 0.604248, lat: 48.026672 } },
+  { position: { lng: 1.2854, lat: 47.982568 } },
+  { position: { lng: 1.318359, lat: 47.894248 } },
+  { position: { lng: 1.373291, lat: 47.879513 } },
+  { position: { lng: 1.384277, lat: 47.798397 } },
+  { position: { lng: 1.329346, lat: 47.754098 } },
+  { position: { lng: 1.329346, lat: 47.680183 } },
+  { position: { lng: 0.999756, lat: 47.635784 } },
+  { position: { lng: 0.86792, lat: 47.820532 } },
+  { position: { lng: 0.571289, lat: 47.820532 } },
+  { position: { lng: 0.439453, lat: 47.717154 } },
+  { position: { lng: 0.439453, lat: 47.61357 } },
+  { position: { lng: -0.571289, lat: 47.487513 } },
+  { position: { lng: -0.615234, lat: 47.680183 } },
+  { position: { lng: -0.812988, lat: 47.724545 } },
+  { position: { lng: -1.054688, lat: 47.680183 } },
+  { position: { lng: -1.219482, lat: 47.41322 } },
+];
+
+const poly1 = [
+  { lng: -1.219482, lat: 47.41322 },
+  { lng: -1.571045, lat: 47.457809 },
+  { lng: -1.560059, lat: 47.739323 },
+  { lng: -0.922852, lat: 47.886881 },
+  { lng: -0.769043, lat: 48.231991 },
+  { lng: 0.395508, lat: 48.268569 },
+  { lng: 0.604248, lat: 48.026672 },
+  { lng: 1.2854, lat: 47.982568 },
+  { lng: 1.318359, lat: 47.894248 },
+  { lng: 1.373291, lat: 47.879513 },
+  { lng: 1.384277, lat: 47.798397 },
+  { lng: 1.329346, lat: 47.754098 },
+  { lng: 1.329346, lat: 47.680183 },
+  { lng: 0.999756, lat: 47.635784 },
+  { lng: 0.86792, lat: 47.820532 },
+  { lng: 0.571289, lat: 47.820532 },
+  { lng: 0.439453, lat: 47.717154 },
+  { lng: 0.439453, lat: 47.61357 },
+  { lng: -0.571289, lat: 47.487513 },
+  { lng: -0.615234, lat: 47.680183 },
+  { lng: -0.812988, lat: 47.724545 },
+  { lng: -1.054688, lat: 47.680183 },
+  { lng: -1.219482, lat: 47.41322 },
+];
 
 export default {
+  components: {
+    LControlPolylineMeasure,
+    LFreedraw,
+    LDrawToolbar,
+  },
   watch: {
     popupName() {
       this.$router.push(`/statistic/code=${this.popupName}`);
@@ -271,6 +315,10 @@ export default {
         color: "",
         style: "",
       },
+      //#region draw
+      isActive: false,
+      polygons: [],
+      //#endregion
       //#region MapOption
       mapOptions: {
         // chức năng của geo
@@ -284,16 +332,7 @@ export default {
         },
         onEachFeature: (feature, layer) => {
           var self = this;
-          if (self.enableTooltip) {
-            layer.bindTooltip(
-              "<div style='color:red;'>code:" +
-                feature.properties.code +
-                "</div><div>nom: " +
-                feature.properties.nom +
-                "</div>",
-              { permanent: false, sticky: true }
-            );
-          }
+
           layer.on("mouseover", function (e) {
             e.target.setStyle({
               fillColor: "teal",
@@ -303,9 +342,8 @@ export default {
             e.target.setStyle({
               fillColor: self.fillColor,
             });
-            
           });
-          layer.on("click", function (e) {
+          layer.on("click", function () {
             self.popupName = feature.properties.code;
             self.isShowLayerInfo = true;
             self.nameDetail = feature.properties.nom;
@@ -313,29 +351,6 @@ export default {
             self.latLngDetail = self.currentCenterLayer;
           });
         },
-        // onEachFeature: (feature, layer) => {
-        //   var self = this;
-        //   layer.on("click", function (e) {
-        //     self.popupName = feature.properties.code;
-        //     self.isShowLayerInfo = true;
-        //     self.nameDetail = feature.properties.nom;
-        //     self.codeDetail = feature.properties.code;
-        //     self.latLngDetail = 1;
-        //     //open popup
-        //     var popup = L.popup();
-        //     popup
-        //       .setLatLng(e.latlng)
-        //       .setContent(
-        //         "<div style='color:red; width:300px'>code:" +
-        //           feature.properties.code +
-        //           "</div><div>nom: " +
-        //           feature.properties.nom +
-        //           "</div>"
-        //       )
-        //       .openOn(self.$refs.myMapRef.mapObject);
-        //   });
-
-        // },
       },
       //#endregion
 
@@ -343,7 +358,7 @@ export default {
       geojson: null,
       fillColor: "#e4ce7f",
       loading: false,
-      show: true,
+      show: false,
       enableTooltip: false,
       isShowLayerInfo: false,
       nameDetail: null,
@@ -364,6 +379,7 @@ export default {
           transparent: true,
           attribution: "Weather data © 2012 IEM Nexrad",
           baseUrl: "http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+          url: " 	http://203.162.10.117:6080/arcgis/rest/services/MapHYServices/MapServer/0",
         },
         {
           name: "Google Maps",
@@ -393,23 +409,85 @@ export default {
           baseUrl: "http://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
         },
       ],
+      markers: [
+        {
+          id: "m1",
+          position: { lat: 51.505, lng: -0.09 },
+          tooltip: "tooltip for marker1",
+          draggable: true,
+          visible: true,
+        },
+        {
+          id: "m2",
+          position: { lat: 51.8905, lng: -0.09 },
+          tooltip: "tooltip for marker2",
+          draggable: true,
+          visible: false,
+        },
+        {
+          id: "m3",
+          position: { lat: 51.005, lng: -0.09 },
+          tooltip: "tooltip for marker3",
+          draggable: true,
+          visible: true,
+        },
+        {
+          id: "m4",
+          position: { lat: 50.7605, lng: -0.09 },
+          tooltip: "tooltip for marker4",
+          draggable: true,
+          visible: false,
+        },
+      ],
+      polylines: [
+        {
+          id: "p1",
+          points: [
+            { lat: 37.772, lng: -122.214 },
+            { lat: 21.291, lng: -157.821 },
+            { lat: -18.142, lng: -181.569 },
+            { lat: -27.467, lng: -206.973 },
+          ],
+          visible: true,
+        },
+        {
+          id: "p2",
+          points: [
+            [-73.91, 40.78],
+            [-87.62, 41.83],
+            [-96.72, 32.76],
+          ],
+          visible: true,
+        },
+      ],
+      poly2: null,
+      stuff: [
+        {
+          id: "s1",
+          markers: markers1,
+          polyline: { points: poly1, visible: true },
+          visible: true,
+          markersVisible: true,
+        },
+      ],
+      poly: null,
       currentCenterLayer: null,
-      map: null,
+      // map: null,
     };
   },
   created() {
     this.handleGetGeo();
+    this.handleGetGeo2();
   },
   mounted() {
-    this.$nextTick(() => {
-      this.map = this.$refs.myMapRef.mapObject; // work as expected
-    });
+    // this.$nextTick(() => {
+    //   this.map = this.$refs.map.mapObject; // work as expected
+    // });
   },
   computed: {
-    options() {
-      return {};
+    mode() {
+      return this.isActive ? ALL : NONE;
     },
-
     styleFunction() {
       const fillColor = this.fillColor; // important! need touch fillColor in computed for re-calculate when change fillColor
       return () => {
@@ -424,6 +502,11 @@ export default {
     },
   },
   methods: {
+    //#region draw
+    flipActive() {
+      this.isActive = !this.isActive;
+    },
+    //#endregion
     //#region show layer position
     /**
      * Lưu vị trí click chuột
@@ -461,9 +544,21 @@ export default {
      * CreatedBy: NGDuong (11/05/2021)
      */
     handleGetGeo() {
+      getGeoDatas2()
+        .then((res) => {
+          this.geojson = res;
+          console.table(this.geojson);
+        })
+        .catch(() => {
+          this.notifyError(notify.Notify_Error());
+        });
+    },
+    handleGetGeo2() {
       getGeoDatas()
         .then((res) => {
-          this.geojson = res.data;
+          this.poly2 = res;
+          console.table(this.poly2);
+          // console.table(poly1);
         })
         .catch(() => {
           this.notifyError(notify.Notify_Error());
@@ -474,7 +569,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
+.please {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.leaflet-draw-toolbar.leaflet-control-toolbar {
+  padding: initial !important;
+}
 .custom-control {
   background: #fff;
   border: 1px solid #aaa;
@@ -506,8 +609,8 @@ export default {
   position: absolute;
   top: 50px;
   right: 11px;
-  width: 400px;
-  height: 410px;
+  width: 300px;
+  height: 310px;
   z-index: 1000;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -515,7 +618,12 @@ export default {
   }
   .span-conclude {
     margin: 10px auto;
-    font-size: 15px;
+    font-size: 13px;
+  }
+  .title {
+    color: rgb(17, 17, 17) !important;
+    font-size: 17px !important;
+    padding: 0 !important;
   }
   .span-img {
     display: flex;
@@ -536,24 +644,13 @@ export default {
   .info-layer {
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 90%;
     height: 30px;
     margin: 5px auto;
     background-color: inherit;
     span {
       font-size: 14px;
     }
-  }
-}
-/**Toast */
-.toast-content {
-  display: flex;
-  align-content: center;
-  text-align: center;
-  span {
-    margin: auto 5px;
-    font-size: 14px;
-    font-weight: 500;
   }
 }
 </style>

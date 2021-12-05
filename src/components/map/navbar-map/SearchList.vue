@@ -2,7 +2,7 @@
   <div>
     <v-card class="mx-auto overflow-hidden" elevation="5">
       <v-list>
-        <v-subheader>REPORTS</v-subheader>
+        <v-subheader>Danh sách tìm kiếm:</v-subheader>
         <v-list-item-group
           v-model="selectedItem"
           color="primary"

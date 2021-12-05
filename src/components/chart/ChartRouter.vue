@@ -18,9 +18,7 @@
         v-model="picker"
       ></v-date-picker>
     </div>
-    <div class="table-title">
-      Thống kê chi tiết
-    </div>
+    <div class="table-title">Thống kê chi tiết</div>
     <div class="table">
       <v-card>
         <v-data-table
@@ -94,10 +92,22 @@
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
+                    <v-btn
+                      color="blue darken-1"
+                      dark
+                      outlined
+                      text
+                      @click="close"
+                    >
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn
+                      color="blue darken-1"
+                      dark
+                      outlined
+                      text
+                      @click="save"
+                    >
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -106,7 +116,7 @@
               <v-spacer></v-spacer>
               <v-divider class="mx-4" inset vertical></v-divider>
 
-              <div style="width:300px" class="mr-2">
+              <div style="width: 300px" class="mr-2">
                 <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
@@ -126,25 +136,37 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn class="mr-4" small icon v-bind="attrs" v-on="on">
-                    <v-icon>mdi-microsoft-excel</v-icon>
+                    <v-icon color="#0F773D">mdi-microsoft-excel</v-icon>
                   </v-btn>
                 </template>
                 <span>Xuất khẩu file excel</span>
               </v-tooltip>
-              <v-dialog v-model="dialogDelete" max-width="500px">
+              <v-dialog v-model="dialogDelete" width="450">
                 <v-card>
-                  <v-card-title class="text-h5"
-                    >Are you sure you want to delete this item?</v-card-title
-                  >
+                  <v-card-title class="base-toast">
+                    <div class="toast-content">
+                      <div class="logo-danger-2"></div>
+                      <span class="ml-3"
+                        >Bạn có chắc chắn muốn xóa phần tử này không ?</span
+                      >
+                    </div>
+                  </v-card-title>
                   <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDelete"
-                      >Cancel</v-btn
+                    <v-btn
+                      color="blue darken-1"
+                      outlined
+                      text
+                      @click="closeDelete"
+                      >Đóng</v-btn
                     >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                      >OK</v-btn
-                    >
                     <v-spacer></v-spacer>
+                    <v-btn
+                      color="red darken-1"
+                      outlined
+                      text
+                      @click="deleteItemConfirm"
+                      >Xóa</v-btn
+                    >
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -154,9 +176,7 @@
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)">
-              mdi-delete
-            </v-icon>
+            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
           </template>
         </v-data-table>
       </v-card>
@@ -165,7 +185,7 @@
 </template>
 
 <script>
-import AreaExample from "../charts/AreaExample";
+import AreaExample from "./AreaExample";
 export default {
   components: {
     AreaExample,
@@ -309,6 +329,10 @@ export default {
   },
 
   methods: {
+    /**
+     * Hàm lấy giá trị định dạng ngày, tháng
+     * @param type true: tháng, false: ngày
+     */
     handleChangeTypeDate(type) {
       this.typeDate = type;
     },

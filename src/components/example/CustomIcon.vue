@@ -1,114 +1,116 @@
 <template>
+
   <div>
-    <div>
-      <span v-if="loading">Loading...</span>
-      <label for="checkbox">GeoJSON Visibility</label>
-      <input id="checkbox" v-model="show" type="checkbox">
-      <label for="checkboxTooltip">Enable tooltip</label>
-      <input id="checkboxTooltip" v-model="enableTooltip" type="checkbox">
-      <input v-model="fillColor" type="color">
-      <br>
+    <div style="height: 20%; overflow: auto;">
+      <h3>Custom Marker Icons</h3>
+      <label for="iconSize">Icon size:</label>
+      <input
+        id="iconSize"
+        v-model="iconSize"
+        type="range"
+        min="1"
+        max="200"
+        value="64"
+      >
+      <label for="customTextInput">Custom text: </label>
+      <input
+        id="customTextInput"
+        v-model="customText"
+        type="text"
+      >
     </div>
-    <l-map :zoom="zoom" :center="center" style="height: 500px; width: 100%">
-      <l-tile-layer :url="url" :attribution="attribution"/>
-      <l-geo-json v-if="show" :geojson="geojson" :options="options" :options-style="styleFunction"/>
-      <l-marker :lat-lng="marker"/>
+    <l-map
+      :zoom="zoom"
+      :center="center"
+      style="height: 500px; width: 100%"
+    >
+      <l-tile-layer
+        :url="url"
+        :attribution="attribution"
+      />
+      <!-- Use default icon -->
+      <l-marker :lat-lng="[47.41322, -1.219482]" />
+      <!-- Use icon given in icon property -->
+      <l-marker
+        :lat-lng="[47.41322, -1.209482]"
+        :icon="icon"
+      />
+      <!-- Create image icon (icon) from l-icon tag -->
+      <l-marker :lat-lng="[47.41322, -1.199482]">
+        <l-icon
+          :icon-size="dynamicSize"
+          :icon-anchor="dynamicAnchor"
+          icon-url="/images/baseball-marker.png"
+        />
+      </l-marker>
+      <!-- Create HTML icon (divIcon) by providing content inside the l-icon tag -->
+      <l-marker :lat-lng="[47.41322, -1.189482]">
+        <l-icon
+          :icon-anchor="staticAnchor"
+          class-name="someExtraClass"
+        >
+          <div class="headline">
+            {{ customText }}
+          </div>
+          <img src="/images/layers.png">
+        </l-icon>
+      </l-marker>
     </l-map>
   </div>
 </template>
 
 <script>
-import { latLng } from "leaflet";
-import { LMap, LTileLayer, LMarker, LGeoJson } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LIcon } from "vue2-leaflet";
+import { latLng, icon } from "leaflet";
 
 export default {
-  name: "Example",
+  name: "Icon",
   components: {
     LMap,
     LTileLayer,
-    LGeoJson,
-    LMarker
+    LMarker,
+    LIcon
   },
   data() {
     return {
-      loading: false,
-      show: true,
-      enableTooltip: true,
-      zoom: 6,
-      center: [10.7802, 106.6872],
-      geojson: null,
-      fillColor: "#e4ce7f",
-      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      zoom: 13,
+      center: latLng(47.41322, -1.219482),
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      marker: latLng(47.41322, -1.219482)
+
+      icon: icon({
+        iconUrl: "static/images/baseball-marker.png",
+        iconSize: [32, 37],
+        iconAnchor: [16, 37]
+      }),
+      staticAnchor: [16, 37],
+      customText: "Foobar",
+      iconSize: 64
     };
   },
   computed: {
-    options() {
-      return {
-        onEachFeature: this.onEachFeatureFunction
-      };
+    dynamicSize() {
+      return [this.iconSize, this.iconSize * 1.15];
     },
-
-    getcolorFunction(d) {
-      return d > 1000
-        ? "#800026"
-        : d > 500
-        ? "#BD0026"
-        : d > 200
-        ? "#E31A1C"
-        : d > 100
-        ? "#FC4E2A"
-        : d > 50
-        ? "#FD8D3C"
-        : d > 20
-        ? "#FEB24C"
-        : d > 10
-        ? "#FED976"
-        : "#FFEDA0";
-    },
-
-    styleFunction() {
-      const fillColor = this.fillColor; // important! need touch fillColor in computed for re-calculate when change fillColor
-      return () => {
-        return {
-          weight: 2,
-          color: "#ECEFF1",
-          opacity: 1,
-          fillColor: getcolorFunction(feature.properties.sales),
-          fillOpacity: 1
-        };
-      };
-    },
-
-    onEachFeatureFunction() {
-      if (!this.enableTooltip) {
-        return () => {};
-      }
-      return (feature, layer) => {
-        layer.bindTooltip(
-          "<div>Name Province:" +
-            feature.properties.varname_1 +
-            "</div><div>Sales: " +
-            feature.properties.sales +
-            "</div>",
-          { permanent: false, sticky: true }
-        );
-      };
+    dynamicAnchor() {
+      return [this.iconSize / 2, this.iconSize * 1.15];
     }
   },
-  async created() {
-    this.loading = true;
-    const response = await fetch(
-      "https://raw.githubusercontent.com/renauld94/data/master/adm_files_YTD.geojson"
-    );
-    const data = await response.json();
-    this.geojson = data;
-    this.loading = false;
-  }
+  methods: {}
 };
 </script>
 
 <style>
+.someExtraClass {
+  background-color: aqua;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+}
 </style>
