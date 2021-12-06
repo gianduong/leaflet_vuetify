@@ -216,7 +216,7 @@
       </l-control>
       <l-geo-json
         v-if="show"
-        :geojson="geojson"
+        :geojson="geoform"
         :options="mapOptions"
         :options-style="styleFunction"
         ref="geo"
@@ -229,13 +229,14 @@
 import { latLng } from "leaflet";
 // import axios from "axios";
 // import L from "leaflet";
-import { getGeoDatas, getGeoDatas2 } from "../../api/baseApi";
-import notify from "../../utils/userMessage";
+// import { getGeoDatas, getGeoDatas2 } from "../../api/baseApi";
+// import notify from "../../utils/userMessage";
 // import { LPopup } from 'vue2-leaflet';
 import LControlPolylineMeasure from "vue2-leaflet-polyline-measure";
 import LFreedraw from "vue2-leaflet-freedraw";
 import { ALL, NONE } from "leaflet-freedraw";
 import LDrawToolbar from "vue2-leaflet-draw-toolbar";
+import axios from "axios";
 const markers1 = [
   {
     position: { lng: -1.219482, lat: 47.41322 },
@@ -379,7 +380,6 @@ export default {
           transparent: true,
           attribution: "Weather data © 2012 IEM Nexrad",
           baseUrl: "http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-          url: " 	http://203.162.10.117:6080/arcgis/rest/services/MapHYServices/MapServer/0",
         },
         {
           name: "Google Maps",
@@ -473,11 +473,42 @@ export default {
       poly: null,
       currentCenterLayer: null,
       // map: null,
+      geoform: {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0.42183, 48.01156],
+                ],
+              ],
+            },
+            properties: {
+              code: "72341",
+              nom: "Soulitré",
+            },
+          },
+        ],
+      },
+      featureform: {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [[[0.42183, 48.01156]]],
+        },
+        properties: {
+          code: "72341",
+          nom: "Soulitré",
+        },
+      },
     };
   },
   created() {
     this.handleGetGeo();
-    this.handleGetGeo2();
+    // this.handleGetGeo2();
   },
   mounted() {
     // this.$nextTick(() => {
@@ -543,27 +574,17 @@ export default {
      * return: list geo layer
      * CreatedBy: NGDuong (11/05/2021)
      */
-    handleGetGeo() {
-      getGeoDatas2()
-        .then((res) => {
-          this.geojson = res;
-          console.table(this.geojson);
-        })
-        .catch(() => {
-          this.notifyError(notify.Notify_Error());
-        });
-    },
-    handleGetGeo2() {
-      getGeoDatas()
-        .then((res) => {
-          this.poly2 = res;
-          console.table(this.poly2);
-          // console.table(poly1);
-        })
-        .catch(() => {
-          this.notifyError(notify.Notify_Error());
-        });
-    },
+    async handleGetGeo() {
+      const data = await axios.get(
+        "http://203.162.10.117:6080/arcgis/rest/services/MapHYServices/MapServer/1/query?returnGeometry=true&where=1%3D1&outSR=4326&outFields=*&inSR=4326&geometry=%7B%22xmin%22%3A105.46875%2C%22ymin%22%3A20.632784250388028%2C%22xmax%22%3A106.171875%2C%22ymax%22%3A21.289374355860424%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&geometryPrecision=6&resultType=tile&f=json"
+      );
+      data.data.features.map((item, index) => {
+        this.geoform.features[index] = {...this.featureform};
+        this.geoform.features[index].geometry.coordinates = item.geometry.rings ;
+      });
+      console.log("form:");
+      console.table(this.geoform);
+    }
     //#endregion
   },
 };
