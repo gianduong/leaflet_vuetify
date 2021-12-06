@@ -344,11 +344,12 @@ export default {
               fillColor: self.fillColor,
             });
           });
+          // TODO: chỉ hiển thị ra một cái layer
           layer.on("click", function () {
-            self.popupName = feature.properties.code;
+            self.popupName = feature.attributes.VARNAME_2;
             self.isShowLayerInfo = true;
-            self.nameDetail = feature.properties.nom;
-            self.codeDetail = feature.properties.code;
+            self.nameDetail = feature.attributes.NAME_2 + "/" + feature.attributes.NAME_1;
+            self.codeDetail = feature.attributes.TYPE_2 + " " + feature.attributes.VARNAME_2;
             self.latLngDetail = self.currentCenterLayer;
           });
         },
@@ -578,8 +579,9 @@ export default {
       const data = await axios.get(
         "http://203.162.10.117:6080/arcgis/rest/services/MapHYServices/MapServer/1/query?returnGeometry=true&where=1%3D1&outSR=4326&outFields=*&inSR=4326&geometry=%7B%22xmin%22%3A105.46875%2C%22ymin%22%3A20.632784250388028%2C%22xmax%22%3A106.171875%2C%22ymax%22%3A21.289374355860424%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&geometryPrecision=6&resultType=tile&f=json"
       );
+      console.table(data.data);
       data.data.features.map((item, index) => {
-        this.geoform.features[index] = {...this.featureform};
+        this.geoform.features[index] = {...this.featureform, attributes: item.attributes};
         this.geoform.features[index].geometry.coordinates = item.geometry.rings ;
       });
       console.log("form:");
