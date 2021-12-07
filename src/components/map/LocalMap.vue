@@ -48,11 +48,6 @@
             <v-icon>mdi-map-search</v-icon>
           </v-btn>
 
-          <!-- <v-btn @click="value = 3" to="/statistic/InfoDetail">
-            <span>Chi tiết</span>
-
-            <v-icon>mdi-axis-arrow-info</v-icon>
-          </v-btn> -->
         </v-bottom-navigation>
         <div class="info-detail">
           <div v-if="value == 1"><DataHeader :items="listDataheader" /></div>
@@ -73,6 +68,7 @@ import InfoDetail from "./navbar-map/InfoDetail.vue";
 import SearchList from "./navbar-map/SearchList.vue";
 /** map */
 import MapDetail from "./MapDetail.vue";
+import axios from 'axios';
 
 export default {
   components: {
@@ -101,14 +97,7 @@ export default {
       ],
       title: "The summer breeze",
       listDataheader: [
-        {
-          id: 1,
-          name: "Quận huyện",
-        },
-        {
-          id: 5,
-          name: "Phường Xã",
-        },
+        
       ],
     };
   },
@@ -128,6 +117,21 @@ export default {
       }
     },
   },
+  created(){
+    this.handleGetLayerName();
+  },
+  methods:{
+    /**
+     * Hàm lấy giá trị tên các lớp dữ liệu
+     */
+    async handleGetLayerName(){
+      const res = await axios.get('https://localhost:44310/api/v1/LayerNames');
+      this.listDataheader = res.data.data.map((item, index) => {
+        return this.listDataheader[index] = {name: item.tenBanDo, id: item.layerNameId}
+      });
+    }
+  }
+
 };
 </script>
 <style lang="scss" scoped>

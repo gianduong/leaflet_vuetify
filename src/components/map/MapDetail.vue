@@ -35,7 +35,7 @@
       <v-system-bar color="#F5F5F5" dark>
         <v-spacer></v-spacer>
 
-        <v-icon color="#111">mdi-window-minimize</v-icon>
+        <v-icon color="#111" @click="isShowLayerInfo = false">mdi-window-minimize</v-icon>
 
         <v-icon color="#111">mdi-window-maximize</v-icon>
 
@@ -348,8 +348,10 @@ export default {
           layer.on("click", function () {
             self.popupName = feature.attributes.VARNAME_2;
             self.isShowLayerInfo = true;
-            self.nameDetail = feature.attributes.NAME_2 + "/" + feature.attributes.NAME_1;
-            self.codeDetail = feature.attributes.TYPE_2 + " " + feature.attributes.VARNAME_2;
+            self.nameDetail =
+              feature.attributes.NAME_2 + "/" + feature.attributes.NAME_1;
+            self.codeDetail =
+              feature.attributes.TYPE_2 + " " + feature.attributes.VARNAME_2;
             self.latLngDetail = self.currentCenterLayer;
           });
         },
@@ -360,9 +362,9 @@ export default {
       geojson: null,
       fillColor: "#e4ce7f",
       loading: false,
-      show: false,
+      show: true,
       enableTooltip: false,
-      isShowLayerInfo: false,
+      isShowLayerInfo: true,
       nameDetail: null,
       latLngDetail: null,
       codeDetail: null,
@@ -481,11 +483,7 @@ export default {
             type: "Feature",
             geometry: {
               type: "Polygon",
-              coordinates: [
-                [
-                  [0.42183, 48.01156],
-                ],
-              ],
+              coordinates: [[[0.42183, 48.01156]]],
             },
             properties: {
               code: "72341",
@@ -579,14 +577,15 @@ export default {
       const data = await axios.get(
         "http://203.162.10.117:6080/arcgis/rest/services/MapHYServices/MapServer/1/query?returnGeometry=true&where=1%3D1&outSR=4326&outFields=*&inSR=4326&geometry=%7B%22xmin%22%3A105.46875%2C%22ymin%22%3A20.632784250388028%2C%22xmax%22%3A106.171875%2C%22ymax%22%3A21.289374355860424%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&geometryPrecision=6&resultType=tile&f=json"
       );
-      console.table(data.data);
-      data.data.features.map((item, index) => {
-        this.geoform.features[index] = {...this.featureform, attributes: item.attributes};
-        this.geoform.features[index].geometry.coordinates = item.geometry.rings ;
+      this.geoform = data.data.features.map((item, index) => {
+        this.geoform.features[index] = {
+          ...this.featureform,
+          attributes: item.attributes,
+        };
+        this.geoform.features[index].geometry.coordinates = item.geometry.rings;
+        return this.geoform.features[index];
       });
-      console.log("form:");
-      console.table(this.geoform);
-    }
+    },
     //#endregion
   },
 };
@@ -630,11 +629,11 @@ export default {
 
 .geo-detail {
   position: absolute;
-  top: 50px;
-  right: 11px;
-  width: 300px;
+  top: 10px;
+  right: 10px;
+  width: 285px;
   height: 310px;
-  z-index: 1000;
+  z-index: 1001;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 3px;
@@ -645,7 +644,7 @@ export default {
   }
   .title {
     color: rgb(17, 17, 17) !important;
-    font-size: 17px !important;
+    font-size: 15px !important;
     padding: 0 !important;
   }
   .span-img {
