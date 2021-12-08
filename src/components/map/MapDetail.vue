@@ -582,7 +582,8 @@ export default {
       console.table(data.data);
       data.data.features.map((item, index) => {
         this.geoform.features[index] = {...this.featureform, attributes: item.attributes};
-        this.geoform.features[index].geometry.coordinates = item.geometry.rings ;
+        this.geoform.features[index].geometry.coordinates = item.geometry.rings;
+        // return this.geoform;
       });
       console.log("form:");
       console.table(this.geoform);
